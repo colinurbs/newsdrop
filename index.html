@@ -1,0 +1,46 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">google.load("feeds", "1");</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <style>
+      body
+      {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300
+      }
+
+      a
+      {
+        color:black;
+        text-decoration:none;
+      }
+
+      #story{
+        font-size:50px;
+        margin:0 auto;
+        width:80%;
+        padding-top:20%;
+      }
+  </style>
+</head>
+<body style=>
+<div style="" id="story"></div>
+</body>
+<script>
+var news;
+var feed = new google.feeds.Feed('http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml');
+feed.load(function (data) {
+news = data;
+});
+feed.setNumEntries(20)
+setInterval(function() {
+  var random = Math.floor(Math.random() * news.feed.entries.length);
+  $('#story').html("<a href=\""+news.feed.entries[random].link+"\">"+news.feed.entries[random].title+"</a>");
+}, 5000);
+setInterval(function() {
+  feed.load(function (data) {
+    news = data;
+  });
+}, 10000);
+</script>
