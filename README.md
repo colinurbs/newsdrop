@@ -1,4 +1,4 @@
-newsflash
+NewsDrop
 =========
 
 A little SPA that does almost nothing.
