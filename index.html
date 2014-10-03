@@ -3,9 +3,11 @@
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript">google.load("feeds", "1");</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jGravity-min.js"></script>
   <style>
       body
       {
+        height:800px;
         font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
         font-weight: 300
       }
@@ -15,32 +17,43 @@
         color:black;
         text-decoration:none;
       }
-
-      #story{
-        font-size:50px;
+      #spawner{
         margin:0 auto;
-        width:80%;
-        padding-top:20%;
+        width:10px;
+      }
+
+      .story{
+        font-size:24px;
+        padding:1px;
+        width:400px;
       }
   </style>
 </head>
-<body style=>
-<div style="" id="story"></div>
+<body >
+<div class="ignoreMe" id="spawner"></div>
+
 </body>
 <script>
-var news;
-var feed = new google.feeds.Feed('http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml');
-feed.load(function (data) {
-news = data;
-});
-feed.setNumEntries(20)
-setInterval(function() {
-  var random = Math.floor(Math.random() * news.feed.entries.length);
-  $('#story').html("<a href=\""+news.feed.entries[random].link+"\">"+news.feed.entries[random].title+"</a>");
-}, 5000);
-setInterval(function() {
+$(document).ready(function() {
+  var news;
+  var feed = new google.feeds.Feed('http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml');
+  feed.setNumEntries(20)
   feed.load(function (data) {
-    news = data;
+  news = data;
+
+  (function(){
+    var random = Math.floor(Math.random() * news.feed.entries.length);
+    $("#spawner").append("<div class=\"story\"><a href=\""+news.feed.entries[random].link+"\">"+news.feed.entries[random].title+"</a></div>")
+      var grav = $('body').jGravity({ // jGravity works best when targeting the body
+       target: 'div.story', // Enter your target critera e.g. 'div, p, span', 'h2' or 'div#specificDiv', or even 'everything' to target everything in the body
+       ignoreClass: 'ignoreMe', // Specify if you would like to use an ignore class, and then specify the class
+       weight: 20, // Enter any number 1-100 ideally (25 is default), you can also use 'heavy' or 'light'
+       depth: 2, // Enter a value between 1-10 ideally (1 is default), this is used to prevent targeting structural divs or other items which may break layout in jGravity
+       drag: false // Decide if users can drag elements which have been effected by jGravity
+     });
+    setTimeout(arguments.callee, 3000);
+    })();
+
   });
-}, 10000);
+});
 </script>
